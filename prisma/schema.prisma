@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = "file:./dev.db"
+}
+
+model Module {
+  id          Int      @id @default(autoincrement())
+  title       String
+  description String?
+  order       Int      @default(0)
+  labs        Lab[]
+}
+
+model Lab {
+  id            Int      @id @default(autoincrement())
+  title         String
+  description   String?
+  objective     String?
+  prerequisites String?
+  order         Int      @default(0)
+  moduleId      Int
+  module        Module   @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  steps         Step[]
+}
+
+model Step {
+  id              Int            @id @default(autoincrement())
+  stepNumber      Int
+  description     String
+  expectedResult  String?
+  commands        String?
+  question        String?
+  order           Int            @default(0)
+  labId           Int
+  lab             Lab            @relation(fields: [labId], references: [id], onDelete: Cascade)
+  progresses      StepProgress[]
+}
+
+model User {
+  id         Int            @id @default(autoincrement())
+  name       String
+  email      String?        @unique
+  progresses StepProgress[]
+}
+
+model StepProgress {
+  id        Int      @id @default(autoincrement())
+  status    String   @default("DONE") // "DONE" or "IN_PROGRESS"
+  notes     String?
+  answer    String?
+  updatedAt DateTime @updatedAt
+  userId    Int
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stepId    Int
+  step      Step     @relation(fields: [stepId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, stepId])
+}
