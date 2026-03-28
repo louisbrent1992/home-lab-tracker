@@ -89,21 +89,29 @@ export default function StepItem({ step, isDone: initialIsDone, notes, answer, u
               <button 
                 type="submit"
                 disabled={!optimisticIsDone && !!step.question && !answerValue.trim()}
-                className={`w-full md:w-auto px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 border shadow-lg ${
+                className={`w-full md:w-auto px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 border shadow-lg group ${
                   optimisticIsDone 
-                   ? 'bg-green-500/10 border-green-500/30 text-green-400 shadow-green-900/20 cursor-pointer hover:bg-green-500/20 hover:border-green-500/50' 
+                   ? 'bg-green-500/10 border-green-500/30 text-green-400 shadow-green-900/20 cursor-pointer hover:bg-zinc-800 hover:border-zinc-600 hover:text-white' 
                    : (!optimisticIsDone && !!step.question && !answerValue.trim())
                      ? 'bg-zinc-800/50 border-zinc-800 text-zinc-500 cursor-not-allowed opacity-50'
                      : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 hover:text-white hover:scale-105 active:scale-95 cursor-pointer'
                 }`}
               >
                {optimisticIsDone ? (
-                 <span className="flex items-center justify-center gap-2">
-                   <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
-                   </svg>
-                   Completed
-                 </span>
+                 <>
+                   <span className="flex items-center justify-center gap-2 group-hover:hidden">
+                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
+                     </svg>
+                     Completed
+                   </span>
+                   <span className="hidden group-hover:flex items-center justify-center gap-2">
+                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                     </svg>
+                     Retry Task
+                   </span>
+                 </>
                ) : 'Mark as Complete'}
              </button>
           </form>
