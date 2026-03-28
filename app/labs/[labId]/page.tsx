@@ -11,6 +11,12 @@ export default async function LabPage(props: { params: Promise<{ labId: string }
     return notFound()
   }
 
+  let user = await prisma.user.findFirst()
+  if (!user) {
+    user = await prisma.user.create({ data: { name: 'Demo User' } })
+  }
+  const userId = user.id
+
   const lab = await prisma.lab.findUnique({
     where: { id: labId },
     include: {
@@ -19,7 +25,7 @@ export default async function LabPage(props: { params: Promise<{ labId: string }
         orderBy: { order: 'asc' },
         include: {
           progresses: {
-            where: { userId: 1 } // Hardcoded for simplicity
+            where: { userId: userId }
           }
         }
       }
@@ -73,7 +79,7 @@ export default async function LabPage(props: { params: Promise<{ labId: string }
               isDone={isDone} 
               notes={progress?.notes || ''}
               answer={progress?.answer || ''}
-              userId={1}
+              userId={userId}
               totalSteps={lab.steps.length}
             />
           )
