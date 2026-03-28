@@ -24,6 +24,42 @@ export default function StepItem({ step, isDone: initialIsDone, notes, answer, u
     setIsNoteOpen(false)
   }
 
+  const renderDescription = (text: string) => {
+    if (!text) return null;
+    return text.split('\n\n').map((paragraph, index) => {
+      // Handle list items with bullet points
+      if (paragraph.includes('\n•') || paragraph.trim().startsWith('•')) {
+        const lines = paragraph.split('\n');
+        return (
+          <div key={index} className="mb-6 space-y-3">
+            {lines.map((line, i) => {
+              line = line.trim();
+              if (line.startsWith('•')) {
+                return (
+                  <div key={i} className="flex items-start gap-4 ml-2">
+                    <div className="w-1.5 h-1.5 rounded-full bg-indigo-500 mt-2.5 shrink-0 shadow-[0_0_8px_rgba(99,102,241,0.8)]" />
+                    <p className="text-zinc-300 leading-relaxed font-light text-lg">{line.substring(1).trim()}</p>
+                  </div>
+                )
+              }
+              if (line) {
+                return <p key={i} className="text-zinc-300 leading-relaxed font-light text-lg">{line}</p>
+              }
+              return null;
+            })}
+          </div>
+        )
+      }
+      
+      // Standard paragraph
+      return (
+        <p key={index} className="text-zinc-300 leading-relaxed font-light text-lg mb-6">
+          {paragraph}
+        </p>
+      );
+    });
+  };
+
   return (
     <div 
       className={`relative overflow-hidden border rounded-2xl p-6 md:p-8 transition-all duration-500 shadow-xl ${
@@ -39,22 +75,24 @@ export default function StepItem({ step, isDone: initialIsDone, notes, answer, u
       
       <div className="relative flex flex-col md:flex-row justify-between items-start gap-6">
         <div className="flex-1 w-full">
-          <div className="flex items-center gap-3 mb-4">
-            <span className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold ${
-              optimisticIsDone ? 'bg-green-500/20 text-green-400' : 'bg-zinc-800 text-zinc-400'
+          <div className="flex items-center gap-3 mb-6">
+            <span className={`flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold shadow-inner ${
+              optimisticIsDone ? 'bg-green-500/20 text-green-400 border border-green-500/30' : 'bg-zinc-800 text-zinc-400 border border-zinc-700/50'
             }`}>
               {step.stepNumber}
             </span>
-            <h3 className="text-xl font-bold tracking-tight text-zinc-100">Action Required</h3>
+            <h3 className="text-sm font-bold tracking-widest text-zinc-400 uppercase">Action Required</h3>
           </div>
           
-          <p className="text-zinc-300 leading-relaxed font-light text-lg mb-6">{step.description}</p>
+          <div className="prose prose-invert max-w-none">
+            {renderDescription(step.description)}
+          </div>
           
           {step.commands && (
             <div className="mb-6 relative group z-10">
               <div className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-500/10 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity duration-500 blur-sm pointer-events-none" />
               <pre className="relative bg-black/50 p-5 rounded-xl overflow-x-auto border border-zinc-800/80 font-mono text-sm shadow-inner selection:bg-blue-500/30">
-                <code className="text-zinc-300">{step.commands}</code>
+                <code className="text-zinc-300 whitespace-pre-wrap">{step.commands}</code>
               </pre>
             </div>
           )}
@@ -64,7 +102,7 @@ export default function StepItem({ step, isDone: initialIsDone, notes, answer, u
               <svg className="w-5 h-5 text-indigo-400 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
-              <span><strong className="font-semibold text-indigo-300">Expected:</strong> {step.expectedResult}</span>
+              <span className="whitespace-pre-wrap"><strong className="font-semibold text-indigo-300">Expected:</strong> {step.expectedResult}</span>
             </div>
           )}
 
