@@ -1,9 +1,13 @@
 import { prisma } from '../lib/prisma'
 import Link from 'next/link'
+import { cookies } from 'next/headers'
 
 export default async function Home() {
-  let user = await prisma.user.findFirst()
-  if (!user) user = await prisma.user.create({ data: { name: 'Demo User' } })
+  const cookieStore = await cookies()
+  const deviceId = cookieStore.get('tracker_device_id')?.value || 'fallback-id'
+
+  let user = await prisma.user.findUnique({ where: { deviceId } })
+  if (!user) user = await prisma.user.create({ data: { deviceId, name: 'Anonymous Device' } })
   const userId = user.id
 
   const modules = await prisma.module.findMany({

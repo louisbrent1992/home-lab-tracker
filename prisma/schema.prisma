@@ -43,6 +43,7 @@ model Step {
 
 model User {
   id         Int            @id @default(autoincrement())
+  deviceId   String?        @unique
   name       String
   email      String?        @unique
   progresses StepProgress[]

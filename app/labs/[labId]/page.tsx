@@ -2,6 +2,7 @@ import { prisma } from '../../../lib/prisma'
 import Link from 'next/link'
 import { notFound } from 'next/navigation'
 import StepItem from '../../../components/StepItem'
+import { cookies } from 'next/headers'
 
 export default async function LabPage(props: { params: Promise<{ labId: string }> }) {
   const params = await props.params
@@ -11,9 +12,12 @@ export default async function LabPage(props: { params: Promise<{ labId: string }
     return notFound()
   }
 
-  let user = await prisma.user.findFirst()
+  const cookieStore = await cookies()
+  const deviceId = cookieStore.get('tracker_device_id')?.value || 'fallback-id'
+
+  let user = await prisma.user.findUnique({ where: { deviceId } })
   if (!user) {
-    user = await prisma.user.create({ data: { name: 'Demo User' } })
+    user = await prisma.user.create({ data: { deviceId, name: 'Anonymous Device' } })
   }
   const userId = user.id
 
