@@ -34,6 +34,19 @@ export default async function LabPage(props: { params: Promise<{ labId: string }
 
   if (!lab) return notFound()
 
+  // Fetch all labs to implement next/prev navigation correctly based on curriculum order
+  const allLabs = await prisma.lab.findMany({
+    orderBy: [
+      { module: { order: 'asc' } },
+      { order: 'asc' }
+    ],
+    select: { id: true, title: true }
+  })
+  
+  const currentLabIndex = allLabs.findIndex(l => l.id === labId)
+  const prevLab = currentLabIndex > 0 ? allLabs[currentLabIndex - 1] : null
+  const nextLab = currentLabIndex < allLabs.length - 1 ? allLabs[currentLabIndex + 1] : null
+
   return (
     <div className="max-w-4xl mx-auto p-4 md:p-8 font-sans w-full pb-32">
       <Link 
@@ -84,6 +97,37 @@ export default async function LabPage(props: { params: Promise<{ labId: string }
             />
           )
         })}
+      </div>
+
+      {/* Navigation Footer */}
+      <div className="mt-16 flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-zinc-800/50">
+        {prevLab ? (
+          <Link href={`/labs/${prevLab.id}`} className="w-full md:w-auto flex items-center justify-start gap-4 px-6 py-4 rounded-xl border border-zinc-800 bg-zinc-900/40 text-left hover:bg-zinc-800 hover:border-zinc-700 transition-all shadow-lg">
+            <span className="text-zinc-500 text-2xl">&larr;</span>
+            <div>
+              <div className="text-xs text-zinc-500 uppercase tracking-wider mb-1">Previous</div>
+              <div className="text-zinc-300 font-medium">{prevLab.title}</div>
+            </div>
+          </Link>
+        ) : <div className="hidden md:block w-full md:w-1/2" />}
+
+        {nextLab ? (
+          <Link href={`/labs/${nextLab.id}`} className="w-full md:w-auto flex items-center justify-end gap-4 px-6 py-4 rounded-xl border border-zinc-800 bg-zinc-900/40 text-right hover:bg-indigo-500/10 hover:border-indigo-500/50 transition-all shadow-lg group">
+            <div>
+              <div className="text-xs text-indigo-400 uppercase tracking-wider mb-1">Next Up</div>
+              <div className="text-zinc-100 font-medium group-hover:text-indigo-300 transition-colors">{nextLab.title}</div>
+            </div>
+            <span className="text-indigo-500 text-2xl group-hover:translate-x-1 transition-transform">&rarr;</span>
+          </Link>
+        ) : (
+          <Link href="/" className="w-full md:w-auto flex items-center justify-end gap-4 px-6 py-4 rounded-xl border border-green-500/30 bg-green-500/10 text-right hover:bg-green-500/20 hover:border-green-500/50 transition-all shadow-lg">
+            <div>
+              <div className="text-xs text-green-400 uppercase tracking-wider mb-1">Finish Course</div>
+              <div className="text-green-100 font-medium">Return to Dashboard</div>
+            </div>
+            <span className="text-green-500 text-2xl">&#10003;</span>
+          </Link>
+        )}
       </div>
     </div>
   )
