@@ -86,13 +86,17 @@ export default function StepItem({ step, isDone: initialIsDone, notes, answer, u
         
         <div className="shrink-0 w-full md:w-auto relative z-20">
           <form action={handleToggle}>
-             <button 
-               className={`w-full md:w-auto px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 border shadow-lg cursor-pointer ${
-                 optimisticIsDone 
-                  ? 'bg-green-500/10 border-green-500/30 text-green-400 hover:bg-green-500/20 hover:border-green-500/50 shadow-green-900/20' 
-                  : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 hover:text-white hover:scale-105 active:scale-95'
-               }`}
-             >
+              <button 
+                type="submit"
+                disabled={!optimisticIsDone && !!step.question && !answerValue.trim()}
+                className={`w-full md:w-auto px-6 py-3 rounded-xl font-medium text-sm transition-all duration-300 border shadow-lg ${
+                  optimisticIsDone 
+                   ? 'bg-green-500/10 border-green-500/30 text-green-400 shadow-green-900/20 cursor-pointer hover:bg-green-500/20 hover:border-green-500/50' 
+                   : (!optimisticIsDone && !!step.question && !answerValue.trim())
+                     ? 'bg-zinc-800/50 border-zinc-800 text-zinc-500 cursor-not-allowed opacity-50'
+                     : 'bg-zinc-800 border-zinc-700 text-zinc-300 hover:bg-zinc-700 hover:border-zinc-600 hover:text-white hover:scale-105 active:scale-95 cursor-pointer'
+                }`}
+              >
                {optimisticIsDone ? (
                  <span className="flex items-center justify-center gap-2">
                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">

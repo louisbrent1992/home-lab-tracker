@@ -42,6 +42,7 @@ async function main() {
                   stepNumber: 2,
                   description: 'To view live hardware metrics, we need to open the system monitor.\n\nOn Windows: Press Ctrl + Shift + Esc to open "Task Manager". If it looks small, click "More details" at the bottom. Click on the "Performance" tab.\n\nOn macOS: Press Cmd + Space to open Spotlight, type "Activity Monitor", and hit Enter.',
                   expectedResult: 'You should see live, moving graphs showing metrics for CPU, Memory (RAM), Disk usage, and Network activity.',
+                  question: 'What specific metrics (e.g., CPU, Memory) were shown in the activity monitor, and what were their current utilization percentages?',
                   order: 2,
                 },
                 {
@@ -98,6 +99,7 @@ async function main() {
                   description: 'We will now create an artificial CPU load (stress test) using an infinite loop. Keep your Task Manager or Activity Monitor open so you can watch what happens.\n\nOn Windows: Open PowerShell (Win + X, select Terminal or Windows PowerShell) and type `while($true){}` and hit Enter.\n\nOn macOS: In Terminal, type `yes > /dev/null` and press Enter.\n\nWait 30 seconds, observe the CPU spike. To stop the test, click inside the terminal and press Ctrl + C.',
                   commands: '# Windows PowerShell\nwhile($true){}\n\n# macOS/Linux Terminal\nyes > /dev/null\n\n# Stop command\nCtrl + C',
                   expectedResult: 'CPU utilization for at least one logical processor core spikes to 100%. Cooling fans may ramp up noticeably.',
+                  question: 'Based on the expected result (CPU utilization for at least o...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 }
               ]
@@ -128,6 +130,7 @@ async function main() {
                   description: 'Disable your network adapter to simulate an outage.\n\nOn Windows: Click the Network/Wi-Fi icon in the bottom-right taskbar and click the Wi-Fi button to turn it off.\nOn macOS: Click the Wi-Fi icon in the top right menu bar and toggle it off.\n\nNow open your terminal/command prompt and attempt to ping an external server by typing `ping 8.8.8.8`.',
                   commands: 'ping 8.8.8.8',
                   expectedResult: 'The terminal returns "Request timed out", "General failure", or "Network is unreachable".',
+                  question: 'Based on the expected result (The terminal returns "Request ...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
@@ -142,6 +145,7 @@ async function main() {
                   stepNumber: 3,
                   description: 'Simulate a frozen application by forcibly terminating the system UI shell.\n\nOn Windows: Press Ctrl + Shift + Esc to open Task Manager. Locate "Windows Explorer" in the list, right-click it, and select "Restart".\n\nOn macOS: Press Option + Cmd + Esc, select "Finder", and click "Relaunch".',
                   expectedResult: 'The taskbar/desktop icons will disappear momentarily and then safely reload, fixing any theoretical UI freezes.',
+                  question: 'What was the total memory consumption shown in the \'top\' output while the server was idle?',
                   order: 3,
                 }
               ]
@@ -167,6 +171,7 @@ async function main() {
                   description: 'On Laptop B, you must verify they can talk to each other. Open the Terminal or Command Prompt on Laptop B.\n\nType `ping [IP_from_Laptop_A]` and press Enter.',
                   commands: 'ping 192.168.1.X',
                   expectedResult: 'Both machines successfully exchange ICMP echo request/replies, proving they are logically connected on the local area network.',
+                  question: 'Did the ping successfully return replies, and what was the average round-trip time in ms?',
                   order: 2,
                 }
               ]
@@ -182,6 +187,7 @@ async function main() {
                 {
                   stepNumber: 1,
                   description: 'We will use your laptop\'s wireless card to broadcast its own network.\n\nOn Windows: Press Win + I to open Settings. Go to "Network & internet" > "Mobile hotspot". Toggle "Share my internet connection" to ON. Click "Properties" or "Edit" to view the network name (SSID) and password.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
@@ -195,6 +201,7 @@ async function main() {
                   stepNumber: 3,
                   description: 'On the smartphone, open a web browser and load any new website (like `example.com`).',
                   expectedResult: 'The website loads. Your laptop is now acting as a router, successfully sharing its internet connection via Network Address Translation (NAT) with the wireless client.',
+                  question: 'What IP address was assigned to your smartphone by the hotspot DHCP?',
                   order: 3,
                 }
               ]
@@ -223,11 +230,13 @@ async function main() {
                 {
                   stepNumber: 1,
                   description: 'On Windows: Press Win + R, type `ncpa.cpl` and hit Enter to open Network Connections. Right-click your active adapter (e.g. Wi-Fi) > Properties. Select "Internet Protocol Version 4 (TCP/IPv4)" and click Properties. Select "Use the following IP address".\n\nSet IP address: 192.168.10.10\nSet Subnet mask: 255.255.255.0\nLeave Default gateway blank for now. Click OK.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
                   stepNumber: 2,
                   description: 'On Laptop B (or a second device/VM), follow the exact same steps but set the IP address to 192.168.10.11 with the same 255.255.255.0 subnet mask. Ensure both are disconnected from the main router to avoid conflicts.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 },
                 {
@@ -235,6 +244,7 @@ async function main() {
                   description: 'Open Command Prompt on Laptop A and type `ping 192.168.10.11`.',
                   commands: 'ping 192.168.10.11',
                   expectedResult: 'Successful replies, meaning static IP routing is functional within the bare subnet.',
+                  question: 'Based on the expected result (Successful replies, meaning st...), what exact system output or behavior did you witness to confirm completion?',
                   order: 3,
                 },
                 {
@@ -265,6 +275,7 @@ async function main() {
                 {
                   stepNumber: 2,
                   description: 'We can change who resolves DNS for us.\n\nOn Windows: Press Win + R, type `ncpa.cpl`. Right-click your adapter > Properties > IPv4 > Properties. Select "Use the following DNS server addresses". Set Preferred to 1.1.1.1 (Cloudflare) and Alternate to 8.8.8.8 (Google). Click OK.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 },
                 {
@@ -272,6 +283,7 @@ async function main() {
                   description: 'When you change a DNS server, your OS might still use cached records. We must forcefully flush this cache.\n\nOn Windows: Open Command Prompt and type `ipconfig /flushdns`.\nOn macOS: Open Terminal and type `sudo dscacheutil -flushcache`.',
                   commands: '# Windows\nipconfig /flushdns\n\n# macOS\nsudo dscacheutil -flushcache',
                   expectedResult: 'The terminal explicitly confirms that the DNS resolver cache was successfully flushed.',
+                  question: 'Based on the expected result (The terminal explicitly confir...), what exact system output or behavior did you witness to confirm completion?',
                   order: 3,
                 }
               ]
@@ -287,6 +299,7 @@ async function main() {
                 {
                   stepNumber: 1,
                   description: 'To turn one PC into a basic file server:\n\nOn a Windows machine, create a new folder on your Desktop named "Shared_Lab". Right-click the folder > Properties > navigate to the "Sharing" tab > click "Advanced Sharing". Check the box "Share this folder". Click "Permissions" and verify that the group "Everyone" has "Read" checked. Click OK.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
@@ -294,6 +307,7 @@ async function main() {
                   description: 'Find the IP address of the Windows machine (using `ipconfig`). Now, from your secondary computer, connect to it.\n\nOn Windows: Open File Explorer, click the top address bar and type `\\[Server_IP_Address]\\Shared_Lab`.\nOn macOS: Open Finder, click "Go" in the top menu > "Connect to Server", and type `smb://[Server_IP_Address]/Shared_Lab`.',
                   commands: '# Windows Explorer\n\\\\192.168.1.50\\Shared_Lab\n\n# macOS Finder > Connect to Server\nsmb://192.168.1.50/Shared_Lab',
                   expectedResult: 'You are prompted for network credentials. Enter the username and password of the account that exists on the server machine.',
+                  question: 'Based on the expected result (You are prompted for network c...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 },
                 {
@@ -336,6 +350,7 @@ async function main() {
                   stepNumber: 2,
                   description: 'By default, VMs are walled off inside a NAT network. We want the VM to appear as a physical PC on your router. \n\nClick the VM, click "Settings", navigate to "Network". By Adapter 1, change "Attached to" from "NAT" to "Bridged Adapter". Select your active Wi-Fi/Ethernet card from the Name dropdown.',
                   expectedResult: 'The VM will bypass VirtualBox\'s internal router and directly ask your home router for its own IP address.',
+                  question: 'Based on the expected result (The VM will bypass VirtualBox\...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 },
                 {
@@ -343,6 +358,7 @@ async function main() {
                   description: 'Click "Start" to boot the VM. Follow prompts to select your downloaded Ubuntu ISO. Once the Ubuntu desktop loads, press Ctrl + Alt + T to open a terminal. Type `ip a` to check its IP address, and `ping 8.8.8.8` to test the internet connection.',
                   commands: 'ip a\nping 8.8.8.8',
                   expectedResult: 'The VM shows an IP address in your home subnet and successfully reaches the internet.',
+                  question: 'Based on the expected result (The VM shows an IP address in ...), what exact system output or behavior did you witness to confirm completion?',
                   order: 3,
                 }
               ]
@@ -367,6 +383,7 @@ async function main() {
                   stepNumber: 2,
                   description: 'To see a graphical view, log in to your home router\'s web dashboard. Open your web browser and type your router\'s IP (usually 192.168.1.1 or 10.0.0.1). Navigate to the "Attached Devices" or "DHCP Leases" table.',
                   expectedResult: 'You should see a list identifying your phone, smart TV, consoles, and laptops.',
+                  question: 'What was the total memory consumption shown in the \'top\' output while the server was idle?',
                   order: 2,
                 },
                 {
@@ -403,17 +420,20 @@ async function main() {
                 {
                   stepNumber: 1,
                   description: 'On Windows: Press Win + R, type `compmgmt.msc` and hit Enter to open Computer Management. On the left pane, expand "Local Users and Groups" > click "Users". Right-click the empty space in the middle pane > "New User...". Name the user "guestlab", assign a password, uncheck "User must change password...", and click "Create". Do NOT add this user to the Administrators group.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
                   stepNumber: 2,
                   description: 'On your C: drive, create a folder called "TopSecret". Right-click it > Properties > "Security" tab. Click "Edit..." to change permissions. Highlight the "Users" group, and in the permissions box below, place checkmarks in the "Deny" column for Full Control, Modify, Read, and Write. Click Apply.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 },
                 {
                   stepNumber: 3,
                   description: 'Click the Start menu, click your User Profile picture, and log out. Log back in using the newly created "guestlab" account. Navigate to the C: drive and double-click the "TopSecret" folder.',
                   expectedResult: 'Windows throws a hard "Access Denied" error detailing insufficient permissions, proving the ACL worked.',
+                  question: 'What exact error message was presented when attempting to open the TopSecret folder?',
                   order: 3,
                 },
                 {
@@ -444,12 +464,14 @@ async function main() {
                   stepNumber: 2,
                   description: 'To test this: On your PC, temporarily run a simple python web server: Open CMD, type `python -m http.server 80`. From a DIFFERENT device on the network (like your phone), open a browser and type your PC\'s IP address (e.g. `http://192.168.1.50`).',
                   expectedResult: 'The browser will time out loading the page because the firewall immediately drops the inbound SYN packet on port 80.',
+                  question: 'How exactly did the browser react (e.g., timed out, immediate connection refused) when the firewall blocked port 80?',
                   order: 2,
                 },
                 {
                   stepNumber: 3,
                   description: 'Go back to Windows Defender Firewall. Find the "Block HTTP Lab" rule in your Inbound list, right-click it, and select "Disable Rule" (or "Delete"). Try loading the page on your phone again.',
                   expectedResult: 'The web page successfully loads, demonstrating real-time mastery over permitting or denying traffic.',
+                  question: 'Based on the expected result (The web page successfully load...), what exact system output or behavior did you witness to confirm completion?',
                   order: 3,
                 }
               ]
@@ -475,6 +497,7 @@ async function main() {
                   description: 'To identify what network services are currently running on your machine, you must check listening ports.\n\nOn Windows: Open CMD as Administrator and type `netstat -ano | findstr LISTENING`. This filters the output purely for open ports.\nOn macOS/Linux: Open Terminal and type `sudo netstat -tuln` (or `lsof -PiTCP -sTCP:LISTEN`).',
                   commands: '# Windows\nnetstat -ano | findstr LISTENING\n\n# Linux\nsudo netstat -tuln',
                   expectedResult: 'You see a list of IP addresses followed by a colon and a port number (e.g., 0.0.0.0:135), alongside a Process ID (PID).',
+                  question: 'Based on the expected result (You see a list of IP addresses...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 },
                 {
@@ -482,6 +505,7 @@ async function main() {
                   description: 'On Windows, you can identify which application holds that port by checking the task list. Type `tasklist | findstr [PID]`, replacing [PID] with one of the numbers from your netstat output in the previous step.',
                   commands: 'tasklist | findstr 1234',
                   expectedResult: 'Returns the exact application executable name (e.g., svchost.exe) bound to the PID.',
+                  question: 'Based on the expected result (Returns the exact application ...), what exact system output or behavior did you witness to confirm completion?',
                   order: 3,
                 }
               ]
@@ -510,6 +534,7 @@ async function main() {
                 {
                   stepNumber: 1,
                   description: 'On the target Windows laptop (Must be Pro version): Press Win + I -> System -> Remote Desktop. Toggle "Enable Remote Desktop" to "On". Verify that your user account is listed under "Remote Desktop users". Ensure you know the machine\'s IP address by checking `ipconfig`.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
@@ -533,6 +558,7 @@ async function main() {
                   stepNumber: 1,
                   description: 'On your Ubuntu VM, open the terminal. Update your packages and install the SSH daemon by typing `sudo apt update && sudo apt install openssh-server -y`. Once installed, ensure the firewall permits SSH traffic by typing `sudo ufw allow ssh`.',
                   commands: 'sudo apt update && sudo apt install openssh-server -y\nsudo systemctl status ssh\nsudo ufw allow ssh',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
@@ -558,12 +584,14 @@ async function main() {
                   description: 'Using passwords for SSH is insecure. Let\'s create cryptographic keys. On your *host* machine (Windows/Mac terminal), type `ssh-keygen -t ed25519 -C "lab_key"` and press Enter continuously to accept defaults without a passphrase.',
                   commands: 'ssh-keygen -t ed25519 -C "lab_key"',
                   expectedResult: 'Two highly secure text files are created in your ~/.ssh/ directory: a private key, and a public key (.pub).',
+                  question: 'Based on the expected result (Two highly secure text files a...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
                   stepNumber: 2,
                   description: 'Copy your public key to the Ubuntu server so it recognizes you.\n\nOn macOS/Linux: type `ssh-copy-id username@[Ubuntu_IP_Address]`.\nOn Windows: type `type %USERPROFILE%\\.ssh\\id_ed25519.pub | ssh username@[Ubuntu_IP_Address] "cat >> .ssh/authorized_keys"`.',
                   commands: 'ssh-copy-id your_vm_user@192.168.1.X',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 },
                 {
@@ -571,6 +599,7 @@ async function main() {
                   description: 'Now, type the SSH command again: `ssh username@[Ubuntu_IP_Address]`.',
                   commands: 'ssh your_vm_user@192.168.1.X',
                   expectedResult: 'You gain instant shell access automatically via cryptographic math, completely bypassing the password prompt.',
+                  question: 'Based on the expected result (You gain instant shell access ...), what exact system output or behavior did you witness to confirm completion?',
                   order: 3,
                 }
               ]
@@ -599,6 +628,7 @@ async function main() {
                 {
                   stepNumber: 1,
                   description: 'Download the "Ubuntu Server" ISO from ubuntu.com. Create a new VM in VirtualBox. Name it "Headless Server". Since it has no graphical interface, allocate only 1024 MB (1GB) RAM and 1 CPU core. Attach the ISO and start the VM.',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
@@ -612,6 +642,7 @@ async function main() {
                   description: 'Once booted, log into the server from its terminal window. Type `top` and press Enter to see live process allocations.',
                   commands: 'top',
                   expectedResult: 'Observe that the total memory consumption of the entire operating system is typically under 300MB at idle.',
+                  question: 'Based on the expected result (Observe that the total memory ...), what exact system output or behavior did you witness to confirm completion?',
                   order: 3,
                 }
               ]
@@ -628,6 +659,7 @@ async function main() {
                   stepNumber: 1,
                   description: 'Scenario Breakdown Setup: Open your Network Adapter settings and manually configure a completely bogus DNS server (e.g., 10.0.0.99), AND open CMD and run `ipconfig /release` to drop your IP address lease without renewing it. Your internet is now thoroughly broken.',
                   commands: '# Windows\nipconfig /release',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
@@ -642,6 +674,7 @@ async function main() {
                   stepNumber: 3,
                   description: 'Apply the final fix: Go back into your Network Adapter settings, change DNS back to "Obtain DNS server address automatically". Run `ipconfig /flushdns`, then load a website in your browser.',
                   expectedResult: 'Connectivity is fully restored utilizing structured isolation methodology.',
+                  question: 'Based on the expected result (Connectivity is fully restored...), what exact system output or behavior did you witness to confirm completion?',
                   order: 3,
                 }
               ]
@@ -658,12 +691,14 @@ async function main() {
                   stepNumber: 1,
                   description: 'SSH into your Linux VM (from Lab 16/18). Let\'s install a production-grade web server software. Type `sudo apt update` and hit Enter, then type `sudo apt install nginx -y` and hit Enter. Finally, ensure it runs automatically by typing `sudo systemctl enable --now nginx`.',
                   commands: 'sudo apt update && sudo apt install nginx -y\nsudo systemctl enable --now nginx',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 1,
                 },
                 {
                   stepNumber: 2,
                   description: 'Nginx serves a default webpage out of the `/var/www/html/` directory. Let\'s modify it using a terminal text editor. Type `sudo nano /var/www/html/index.nginx-debian.html`. Use arrow keys to find the "<title>" tag and "<h1>" tag. Delete the placeholder text and type "Welcome to my Home Lab Server". Press Ctrl + O, Enter, then Ctrl + X to save and exit.',
                   commands: 'sudo nano /var/www/html/index.nginx-debian.html',
+                  question: 'Based on the expected result (...), what exact system output or behavior did you witness to confirm completion?',
                   order: 2,
                 },
                 {
