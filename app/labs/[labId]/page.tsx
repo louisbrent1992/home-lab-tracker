@@ -78,6 +78,36 @@ export default async function LabPage(props: { params: Promise<{ labId: string }
             </div>
           )}
         </div>
+        
+        {/* Lab Progress Indicator */}
+        <div className="mt-8 bg-zinc-900/60 border border-zinc-800/80 p-5 rounded-xl shadow-lg backdrop-blur-sm">
+          {(() => {
+            const totalSteps = lab.steps.length;
+            const completedSteps = lab.steps.filter(s => s.progresses[0]?.status === 'DONE').length;
+            const percentage = totalSteps > 0 ? Math.round((completedSteps / totalSteps) * 100) : 0;
+            
+            return (
+              <>
+                <div className="flex justify-between items-center mb-3">
+                  <span className="text-zinc-300 font-medium">Lab Progress</span>
+                  <span className={`font-bold ${percentage === 100 ? 'text-green-400' : 'text-indigo-400'}`}>
+                    {percentage}% ({completedSteps}/{totalSteps} Steps)
+                  </span>
+                </div>
+                <div className="w-full bg-zinc-800/50 rounded-full h-2.5 overflow-hidden border border-zinc-900">
+                  <div 
+                    className={`h-full rounded-full transition-all duration-1000 ease-out ${
+                      percentage === 100 
+                        ? 'bg-gradient-to-r from-green-500 to-emerald-400' 
+                        : 'bg-gradient-to-r from-indigo-600 to-indigo-400'
+                    }`}
+                    style={{ width: `${percentage}%` }}
+                  />
+                </div>
+              </>
+            );
+          })()}
+        </div>
       </div>
 
       <div className="space-y-6 relative z-10">

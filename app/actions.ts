@@ -25,6 +25,7 @@ export async function toggleStepProgress(userId: number, stepId: number, isDone:
   })
   
   revalidatePath('/labs/[labId]', 'page')
+  revalidatePath('/')
 }
 
 export async function saveStepNote(userId: number, stepId: number, notes: string) {
@@ -41,4 +42,5 @@ export async function saveStepNote(userId: number, stepId: number, notes: string
     }
   })
   revalidatePath('/labs/[labId]', 'page')
+  revalidatePath('/')
 }
