@@ -43,41 +43,65 @@ export default async function Home() {
   const globalPercentage = totalLabs > 0 ? Math.round((completedLabsCount / totalLabs) * 100) : 0
 
   return (
-    <div className="max-w-5xl mx-auto p-8 font-sans w-full">
-      <div className="py-16 md:py-24 text-center">
-        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium mb-6">
-          <span className="relative flex h-2 w-2">
-            <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-            <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
-          </span>
-          CompTIA A+ Certification Prep
-        </div>
-        <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight bg-gradient-to-br from-white via-zinc-200 to-zinc-600 text-transparent bg-clip-text">
-          Interactive Lab Tracker
-        </h1>
-        <p className="max-w-2xl mx-auto text-lg md:text-xl text-zinc-400 leading-relaxed font-light mb-10">
-          Master IT fundamentals, networking, and troubleshooting with hands-on labs designed for the CompTIA A+ exam. Select a curriculum module to begin.
-        </p>
-
-        {/* Global Progress Bar */}
-        <div className="max-w-md mx-auto bg-zinc-900/60 border border-zinc-800/80 p-5 rounded-2xl shadow-xl backdrop-blur-sm">
-          <div className="flex justify-between items-center mb-3">
-            <span className="text-zinc-300 font-medium tracking-tight">Course Progress</span>
-            <span className={`font-bold ${globalPercentage === 100 ? 'text-green-400' : 'text-blue-400'}`}>
-              {globalPercentage}% ({completedLabsCount}/{totalLabs} Labs)
+    <div className="max-w-6xl mx-auto p-8 font-sans w-full">
+      <div className="py-16 md:py-24 flex flex-col lg:flex-row justify-between items-center gap-12">
+        <div className="text-left w-full lg:max-w-2xl">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
             </span>
+            CompTIA A+ Certification Prep
           </div>
-          <div className="w-full bg-zinc-800/50 rounded-full h-3.5 overflow-hidden border border-zinc-900 shadow-inner">
-            <div 
-              className={`h-full rounded-full transition-all duration-1000 ease-out relative overflow-hidden ${
-                globalPercentage === 100 
-                  ? 'bg-gradient-to-r from-green-500 to-emerald-400' 
-                  : 'bg-gradient-to-r from-blue-600 to-indigo-400'
-              }`}
-              style={{ width: `${globalPercentage}%` }}
-            >
-              <div className="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite] -skew-x-12 translate-x-[-100%]" />
+          <h1 className="text-5xl md:text-7xl font-extrabold mb-6 tracking-tight bg-gradient-to-br from-white via-zinc-200 to-zinc-600 text-transparent bg-clip-text">
+            Interactive Lab Tracker
+          </h1>
+          <p className="text-lg md:text-xl text-zinc-400 leading-relaxed font-light">
+            Master IT fundamentals, networking, and troubleshooting with hands-on labs designed for the CompTIA A+ exam. Select a curriculum module to begin.
+          </p>
+        </div>
+
+        {/* Global Progress Circle */}
+        <div className="shrink-0 flex flex-col items-center justify-center p-8 bg-zinc-900/40 border border-zinc-800/80 rounded-[2rem] shadow-2xl backdrop-blur-xl w-full max-w-sm lg:max-w-xs transition-all hover:border-zinc-700 hover:bg-zinc-900/60 group">
+          <div className="text-zinc-400 font-semibold tracking-widest uppercase text-xs mb-6 group-hover:text-zinc-300 transition-colors">Course Progress</div>
+          <div className="relative flex items-center justify-center w-40 h-40">
+            {/* SVG Ring background */}
+            <svg className="w-full h-full transform -rotate-90 drop-shadow-lg" viewBox="0 0 100 100">
+              <circle
+                cx="50"
+                cy="50"
+                r="42"
+                strokeWidth="12"
+                stroke="currentColor"
+                fill="transparent"
+                className="text-zinc-900"
+              />
+              {/* SVG Progress Ring */}
+              <circle
+                cx="50"
+                cy="50"
+                r="42"
+                strokeWidth="12"
+                stroke="currentColor"
+                fill="transparent"
+                strokeLinecap="round"
+                className={`transition-all duration-1000 ease-out ${
+                  globalPercentage === 100 ? 'text-green-500 drop-shadow-[0_0_12px_rgba(34,197,94,0.4)]' : 'text-blue-500 drop-shadow-[0_0_12px_rgba(59,130,246,0.4)]'
+                }`}
+                strokeDasharray="263.89"
+                strokeDashoffset={263.89 - (globalPercentage / 100) * 263.89}
+              />
+            </svg>
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <span className={`text-4xl font-black tracking-tighter drop-shadow-sm ${
+                globalPercentage === 100 ? 'text-green-400' : 'text-white'
+              }`}>
+                {globalPercentage}%
+              </span>
             </div>
+          </div>
+          <div className="mt-8 px-5 py-2 bg-zinc-950/80 rounded-full border border-zinc-800 text-sm font-medium text-zinc-300 shadow-inner">
+            <span className={globalPercentage === 100 ? 'text-green-400' : 'text-blue-400'}>{completedLabsCount}</span> / {totalLabs} Labs
           </div>
         </div>
       </div>
